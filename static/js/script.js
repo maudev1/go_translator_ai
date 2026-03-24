@@ -11,9 +11,9 @@ const app = {
 
         document.getElementById('content').addEventListener('wheel', (event) => {
 
-            app.selectizeWord(event.deltaY);
+            app.navigate(event.deltaY);
 
-            app.showPosition();
+            // app.showPosition();
 
         });
 
@@ -53,24 +53,33 @@ const app = {
         }
 
     },
-    selectizeWord(position) {
+    navigate(direction) {
 
-        let downSelector = document.querySelector('.down')
-        let upSelector = document.querySelector('.up')
+        let downSelector = document.querySelector('.down');
+        let upSelector = document.querySelector('.up');
 
-        downSelector.classList.remove('active')
-        upSelector.classList.remove('active')
+        downSelector.classList.remove('active');
+        upSelector.classList.remove('active');
 
-        if (position > 1) {
+        if (direction > 1) {
 
-            downSelector.classList.add('active')
+            // down
+
+            downSelector.classList.add('active');
+
+             app.showPosition('down');
 
         } else {
 
-            upSelector.classList.add('active')
+            // up 
 
+            upSelector.classList.add('active');
+
+            app.showPosition('up');
+            
         }
-
+        
+        
         setTimeout(function () {
             downSelector.classList.remove('active')
             upSelector.classList.remove('active')
@@ -80,11 +89,9 @@ const app = {
     },
     updatePreview(index) {
 
+        // debugger/
+
         app.wordList().then((text) => {
-
-            console.log(index)
-
-            console.log(text[index].value)
 
             document.getElementById('editor').value = text[index].value
 
@@ -92,14 +99,24 @@ const app = {
 
 
     },
-    showPosition() {
+    showPosition(direction) {
 
         app.wordList().then((texts) => {
 
             let initial = 0;
             let lastPosition = texts.length;
+            
             let position = app.currentPosition + 1
+            
+            if(direction == "down"){
+                
+                position = app.currentPosition - 1
+            }
 
+
+            if(position <= 0 || position > lastPosition){
+                return;
+            }
 
             if (position == lastPosition) {
 
@@ -116,12 +133,13 @@ const app = {
             }
 
 
-            document.getElementById('index-position').innerHTML = `${app.currentPosition + 1}/${lastPosition}`
+            document.getElementById('index-position').innerHTML = `${position}/${lastPosition}`
 
         })
 
 
     }
+
 
 
 
