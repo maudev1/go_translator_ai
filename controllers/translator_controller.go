@@ -3,7 +3,6 @@ package controllers
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -18,21 +17,46 @@ type TextKey struct {
 	Value string
 }
 
+type TranslateRequest struct {
+	Engine string `json:"engine"`
+	Text   string `json:"text"`
+}
+
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 
-	t := translator.New()
-	result, err := t.Translate("Hello, World!", "auto", "pt_br")
+	config := models.GetConfig()
+
+	var req TranslateRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		panic(err)
+		http.Error(w, "JSON invalido", http.StatusBadRequest)
+		return
 	}
 
-	fmt.Println(result)
+	if req.Engine == "google" {
+		t := translator.New()
 
-	// text := result.Text
+		result, err := t.Translate(req.Text, "auto", config.Language)
+		if err != nil {
+			http.Error(w, "erro na tradução", 500)
+			return
+		}
 
-	// tmpl := template.Must(template.ParseFiles("views/translate.html"))
-	// tmpl.Execute(w, result)
+		resp := map[string]interface{}{
+			"engine":     req.Engine,
+			"original":   result.Origin,
+			"translated": result.Text,
+			"source":     result.Src,
+			"target":     result.Dest,
+		}
 
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(resp)
+		return
+	}
+
+	http.Error(w, "engine não suportado", 400)
 }
 
 func LoadBaseFile(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +65,6 @@ func LoadBaseFile(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-		// panic(err)
 	}
 
 	defer file.Close()
@@ -52,8 +75,6 @@ func LoadBaseFile(w http.ResponseWriter, r *http.Request) {
 
 	for scanner.Scan() {
 		row := scanner.Text()
-
-		fmt.Println("linha:", row)
 
 		parts := strings.SplitN(row, "=", 2)
 
@@ -69,13 +90,9 @@ func LoadBaseFile(w http.ResponseWriter, r *http.Request) {
 			"value": value,
 		}
 
-		// fmt.Println(texts)
-
 		textsSlice = append(textsSlice, texts)
 
 	}
-
-	// fmt.Println(textsSlice)
 
 	if err := scanner.Err(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -11,21 +11,35 @@ const app = {
 
         document.getElementById('content').addEventListener('wheel', (event) => {
 
-            if (event.deltaY > 1) {
-                console.log('baixo')
-            } else {
-                console.log('cima')
-
-            }
-
             app.selectizeWord(event.deltaY);
 
             app.showPosition();
 
-        })
+        });
 
+        document.querySelector('.translate').addEventListener('click', async function(event){
 
+            const engine = event.target.dataset.engine
+            const text   = document.getElementById('editor').value;
 
+            let data = await fetch('/translate', {
+                method:'POST',
+                body: JSON.stringify({
+                    engine: engine,
+                    text: text
+                })
+            }) 
+
+            if(data.ok){
+                let response = await data.json();
+
+                document.getElementById('editor').value = response.translated
+
+            }
+
+  
+
+        });
 
 
     },
@@ -38,8 +52,6 @@ const app = {
             return results;
         }
 
-
-        return ['uva', 'pera', 'maca', 'salada mista'];
     },
     selectizeWord(position) {
 
@@ -57,7 +69,6 @@ const app = {
 
             upSelector.classList.add('active')
 
-
         }
 
         setTimeout(function () {
@@ -70,7 +81,12 @@ const app = {
     updatePreview(index) {
 
         app.wordList().then((text) => {
-            document.getElementById('editor').innerHTML = text[index].value
+
+            console.log(index)
+
+            console.log(text[index].value)
+
+            document.getElementById('editor').value = text[index].value
 
         })
 
@@ -96,6 +112,7 @@ const app = {
                 app.updatePreview(position);
 
                 app.currentPosition = position;
+
             }
 
 
