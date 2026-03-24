@@ -5,7 +5,7 @@ const app = {
 
     init() {
 
-        app.showPosition();
+        app.setPosition();
 
         app.updatePreview(app.currentPosition);
 
@@ -13,7 +13,7 @@ const app = {
 
             app.navigate(event.deltaY);
 
-            // app.showPosition();
+            // app.setPosition();
 
         });
 
@@ -41,6 +41,22 @@ const app = {
 
         });
 
+        document.querySelector('#search-index').addEventListener('click', () => {
+
+            let index = document.getElementById('index').value;
+
+            if(!index || index < 1 || typeof index == "undefined"){
+                return;
+            }
+
+            app.currentPosition = index;
+
+            app.updatePreview(index);
+
+            app.showPosition();
+
+        })
+
 
     },
     async wordList() {
@@ -67,15 +83,15 @@ const app = {
 
             downSelector.classList.add('active');
 
-             app.showPosition('down');
-
+            app.setPosition('down');
+            
         } else {
-
+            
             // up 
-
+            
             upSelector.classList.add('active');
-
-            app.showPosition('up');
+            
+            app.setPosition('up');
             
         }
         
@@ -89,8 +105,6 @@ const app = {
     },
     updatePreview(index) {
 
-        // debugger/
-
         app.wordList().then((text) => {
 
             document.getElementById('editor').value = text[index].value
@@ -99,16 +113,17 @@ const app = {
 
 
     },
-    showPosition(direction) {
+    setPosition(direction) {
 
         app.wordList().then((texts) => {
 
             let initial = 0;
             let lastPosition = texts.length;
-            
+            app.lastPosition = lastPosition;
+
             let position = app.currentPosition + 1
             
-            if(direction == "down"){
+            if(direction == "up"){
                 
                 position = app.currentPosition - 1
             }
@@ -132,12 +147,16 @@ const app = {
 
             }
 
+            app.showPosition();
 
-            document.getElementById('index-position').innerHTML = `${position}/${lastPosition}`
+            // document.getElementById('index-position').innerHTML = `${position}/${lastPosition}`
 
         })
 
 
+    },
+    showPosition(){
+        document.getElementById('index-position').innerHTML = `${app.currentPosition}/${app.lastPosition}`
     }
 
 
