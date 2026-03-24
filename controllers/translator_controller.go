@@ -23,7 +23,6 @@ type TranslateRequest struct {
 }
 
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
-
 	config := models.GetConfig()
 
 	var req TranslateRequest
