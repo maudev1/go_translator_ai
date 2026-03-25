@@ -18,8 +18,13 @@ type Config struct {
 }
 
 type ConfigRequest struct {
-	Language  string `json:"lanconfig.dbConnect(guage"`
+	Language  string `json:"language"`
 	GroqToken string `json:"groqToken"`
+}
+
+type Languages struct {
+	Code     string `json:"code"`
+	Language string `json:"language"`
 }
 
 func GetConfig(db *sql.DB) Config {
