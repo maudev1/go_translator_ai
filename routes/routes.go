@@ -12,7 +12,10 @@ func SetupRoutes() *http.ServeMux {
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	mux.HandleFunc("/", controllers.MainHandler)
+
 	mux.HandleFunc("/config", controllers.ConfigHandler)
+	mux.HandleFunc("/set-config", controllers.SetConfigHandler)
+
 	mux.HandleFunc("/translate", controllers.TranslateHandler)
 	mux.HandleFunc("/load-base-text", controllers.LoadBaseFile)
 

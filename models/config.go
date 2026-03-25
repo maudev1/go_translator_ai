@@ -5,40 +5,55 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
-)
 
-var DB *sql.DB
+	databaseConfig "app_translator/config"
+)
 
 type Config struct {
 	ID             int
 	Language       string
-	InputFile      string
 	BaseFile       string
 	TranslatedFile string
 	GroqToken      string
 }
 
-func GetConfig() Config {
-
-	SetConfig()
-
-	return Config{
-		ID:             1,
-		Language:       "pt_br",
-		InputFile:      "files/input/base.file",
-		BaseFile:       "files/input/base.file",
-		TranslatedFile: "files/input/translated.file",
-		GroqToken:      "token here",
-	}
+type ConfigRequest struct {
+	Language  string `json:"lanconfig.dbConnect(guage"`
+	GroqToken string `json:"groqToken"`
 }
 
-func SetConfig() {
+func GetConfig(db *sql.DB) Config {
+
+	var config Config
+
+	err := db.QueryRow("SELECT * FROM config LIMIT 1").
+		Scan(&config.ID, &config.Language, &config.BaseFile, &config.TranslatedFile, &config.GroqToken)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return config
+
+	// return Config{
+	// 	ID:             1,
+	// 	Language:       "pt_br",
+	// 	InputFile:      "files/input/base.file",
+	// 	BaseFile:       "files/input/base.file",
+	// 	TranslatedFile: "files/input/translated.file",
+	// 	GroqToken:      "token here",
+	// }
+}
+
+func SetConfig(config ConfigRequest) {
+
+	DB := databaseConfig.DatabaseConnect()
 
 	var err error
-	DB, err = sql.Open("sqlite3", "./config/app.db") // Open a connection to the SQLite database file named app.db
-	if err != nil {
-		log.Fatal(err) // Log an error and stop the program if the database can't be opened
-	}
+	// DB, err = sql.Open("sqlite3", "./config/app.db") // Open a connection to the SQLite database file named app.db
+	// if err != nil {
+	// 	log.Fatal(err) // Log an error and stop the program if the database can't be opened
+	// }
 
 	// SQL statement to create the todos table if it doesn't exist
 	// sqlStmt := `CREATE TABLE IF NOT EXISTS config (
@@ -53,8 +68,8 @@ func SetConfig() {
 	// 	log.Fatalf("Error creating table: %q: %s\n", err, sqlStmt)
 	// }
 
-	sqlStmt := `INSERT INTO config ( language, inputFile, translatedFile) 
-	values ("pt_br", "files/input/base.file", "files/input/translated.file");`
+	sqlStmt := `INSERT INTO config ( language, inputFile, translatedFile, groqToken)
+	values ("` + config.Language + `", "files/input/base.file", "files/input/translated.file", "` + config.GroqToken + `");`
 
 	_, err = DB.Exec(sqlStmt)
 	if err != nil {

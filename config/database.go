@@ -5,13 +5,10 @@ import (
 	"log"
 )
 
-var DB *sql.DB
-
-func initDB() {
-	var err error
-	DB, err = sql.Open("sqlite3", "./app.db")
+func DatabaseConnect() *sql.DB {
+	db, err := sql.Open("sqlite3", "config/app.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	return db
 }

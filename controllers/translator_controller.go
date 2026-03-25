@@ -9,6 +9,8 @@ import (
 
 	"app_translator/models"
 
+	databaseConfig "app_translator/config"
+
 	translator "github.com/Conight/go-googletrans"
 )
 
@@ -23,7 +25,7 @@ type TranslateRequest struct {
 }
 
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
-	config := models.GetConfig()
+	config := models.GetConfig(databaseConfig.DatabaseConnect())
 
 	var req TranslateRequest
 
@@ -59,8 +61,8 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoadBaseFile(w http.ResponseWriter, r *http.Request) {
-	config := models.GetConfig()
-	file, err := os.Open(config.InputFile)
+	config := models.GetConfig(databaseConfig.DatabaseConnect())
+	file, err := os.Open(config.BaseFile)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

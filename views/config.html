@@ -38,27 +38,23 @@
             <form id="form-config">
                 <div class="form-group">
                     <label for="" class="form-label">language</label>
-                    <select name="" id="" class="form-control">
-                        <option value="">English</option>
+                    <select name="language" id="" class="form-control">
+                        <option value="en-us">English</option>
                     </select>
                 </div>
 
                 <div class="form-group mt-3">
                     <label for="" class="form-label">groq token</label>
-                    <input type="text" class="form-control" value="{{ .GroqToken }}">
+                    <input name="groqToken" type="text" class="form-control" value="{{ .GroqToken }}">
                 </div>
 
                 <div class="form-group mt-3">
                     <button type="submit" class="btn btn-outline-nebula">save</button>
                 </div>
 
-
             </form>
 
-
         </div>
-
-
 
     </div>
 
