@@ -7,6 +7,8 @@ const config = {
 
         });
 
+        config.getLanguages()
+
     },
     async update(target){
 
@@ -30,6 +32,11 @@ const config = {
     },
     async get(){
 
+
+    },
+    async getLanguages(){
+        let data = await fetch('/static/files/language.json')
+        let results = await data.json();
 
     }
 
