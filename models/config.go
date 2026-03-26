@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -73,8 +74,12 @@ func SetConfig(config ConfigRequest) {
 	// 	log.Fatalf("Error creating table: %q: %s\n", err, sqlStmt)
 	// }
 
-	sqlStmt := `INSERT INTO config ( language, inputFile, translatedFile, groqToken)
-	values ("` + config.Language + `", "files/input/base.file", "files/input/translated.file", "` + config.GroqToken + `");`
+	fmt.Println(config)
+
+	sqlStmt := `UPDATE config set language="` + config.Language + `",groqToken="` + config.GroqToken + `" WHERE id = 1`
+
+	// sqlStmt := `INSERT INTO config ( language, inputFile, translatedFile, groqToken)
+	// values ("` + config.Language + `", "files/input/base.file", "files/input/translated.file", "` + config.GroqToken + `");`
 
 	_, err = DB.Exec(sqlStmt)
 	if err != nil {

@@ -7,15 +7,16 @@ const config = {
 
         });
 
-        config.getLanguages()
+        config.getLanguages();
+
+        config.get();
+
 
     },
     async update(target){
 
         let formData = new FormData(target);
         let formObject = Object.fromEntries(formData.entries()); 
-
-        console.log(formObject)
 
         let options = {
             method:"POST",
@@ -32,11 +33,30 @@ const config = {
     },
     async get(){
 
+        let data    = await fetch(`get-config`);
+        let results = await data.json();
+
+        // $(`#language`).selectize({
+        //     items:[results.Language]
+        // })
+    
 
     },
     async getLanguages(){
-        let data = await fetch('/static/files/language.json')
+        let data    = await fetch('/static/files/language.json')
         let results = await data.json();
+
+        let languageSelect = document.getElementById('language');
+ 
+        for(let [index, value] of Object.entries(results)){
+
+            let languageOptionElement = document.createElement(`option`)
+            languageOptionElement.setAttribute('value', index)
+            languageOptionElement.textContent = value
+            languageSelect.appendChild(languageOptionElement)
+        }
+
+        $(`#language`).selectize();
 
     }
 
