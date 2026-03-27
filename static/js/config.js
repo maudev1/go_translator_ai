@@ -36,11 +36,7 @@ const config = {
         let data    = await fetch(`get-config`);
         let results = await data.json();
 
-        // $(`#language`).selectize({
-        //     items:[results.Language]
-        // })
-    
-
+        return results;
     },
     async getLanguages(){
         let data    = await fetch('/static/files/language.json')
@@ -56,7 +52,16 @@ const config = {
             languageSelect.appendChild(languageOptionElement)
         }
 
-        $(`#language`).selectize();
+        config.get().then((data)=>{
+
+            let $select = $(`#language`).selectize();
+
+            let control = $select[0].selectize;
+
+            control.setValue(data.Language)
+
+        });
+
 
     }
 
