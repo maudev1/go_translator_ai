@@ -74,12 +74,24 @@ func SetConfig(config ConfigRequest) {
 	// 	log.Fatalf("Error creating table: %q: %s\n", err, sqlStmt)
 	// }
 
-	fmt.Println(config)
-
 	sqlStmt := `UPDATE config set language="` + config.Language + `",groqToken="` + config.GroqToken + `" WHERE id = 1`
 
 	// sqlStmt := `INSERT INTO config ( language, inputFile, translatedFile, groqToken)
 	// values ("` + config.Language + `", "files/input/base.file", "files/input/translated.file", "` + config.GroqToken + `");`
+
+	_, err = DB.Exec(sqlStmt)
+	if err != nil {
+		log.Fatalf("Error insert into table: %q: %s\n", err, sqlStmt)
+	}
+
+}
+
+func SetFileConfig(fileName string){
+	DB := databaseConfig.DatabaseConnect()
+
+	var err error
+
+	sqlStmt := `UPDATE config set inputFile="` + fileName + `" WHERE id = 1`
 
 	_, err = DB.Exec(sqlStmt)
 	if err != nil {
