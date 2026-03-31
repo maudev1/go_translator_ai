@@ -34,7 +34,10 @@ const config = {
 
         let data = await fetch('set-config', options)
 
+        if (data) {
 
+            helpers.custom_alert("The Configuration has been saved", "success");
+        }
 
     },
 
@@ -43,7 +46,7 @@ const config = {
         const formData = new FormData();
 
         formData.append("baseFile", target[0].files[0]);
- 
+
         let options = {
             method: "POST",
             body: formData
