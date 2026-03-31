@@ -46,7 +46,7 @@
 
             <form id="form-config">
 
-                <h2>Basic</h2>
+                <!-- <h2>Basic</h2> -->
 
                 <div class="form-group">
                     <label for="" class="form-label">language</label>
@@ -59,18 +59,21 @@
                     <input name="groqToken" type="text" class="form-control" value="{{ .GroqToken }}">
                 </div>
 
-                <hr>
 
-                <h2>File</h2>
-
-                <div class="form-group mt-3">
-                    <label for="" class="form-label">base file</label>
-                    <input type="file" name="baseFile" class="form-control">
-
+                <div class="form-group mt-3 text-end">
+                    <button type="submit" class="btn btn-outline-nebula">save</button>
                 </div>
 
-                <div class="form-group mt-3">
-                    <button type="submit" class="btn btn-outline-nebula">save</button>
+            </form>
+
+            <hr>
+
+            <form id="file-uploader" enctype="multipart/form-data">
+
+                <label for="" class="form-label">set base file</label>
+                <div class="input-group mt-3">
+                    <input type="file" name="baseFile" class="form-control">
+                    <button class="btn btn-outline-nebula" type="submit">upload</button>
                 </div>
 
             </form>

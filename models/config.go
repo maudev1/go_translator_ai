@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -86,7 +85,7 @@ func SetConfig(config ConfigRequest) {
 
 }
 
-func SetFileConfig(fileName string){
+func SetBaseFileConfig(fileName string) {
 	DB := databaseConfig.DatabaseConnect()
 
 	var err error

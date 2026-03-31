@@ -34,16 +34,19 @@ func SetConfigHandler(w http.ResponseWriter, r *http.Request) {
 
 	models.SetConfig(req)
 
-	// file 
+}
 
-	file, handler, err := r.FormFile("base_file")
+func SetBaseFile(w http.ResponseWriter, r *http.Request) {
+
+	// file
+	file, handler, err := r.FormFile("baseFile")
+
 	if err != nil {
-		http.Errpr(w, "Failed to get base file", err.Error(), http.StatusBadRequest)
+		http.Error(w, "Failed to get base file: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
 
-	models.SetFileConfig(handler.Filename)
+	models.SetBaseFileConfig("files/input/" + handler.Filename)
 
 }
-

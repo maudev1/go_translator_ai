@@ -17,6 +17,8 @@ func SetupRoutes() *http.ServeMux {
 	mux.HandleFunc("/set-config", controllers.SetConfigHandler)
 	mux.HandleFunc("/get-config", controllers.GetConfigHandler)
 
+	mux.HandleFunc("/set-basefile", controllers.SetBaseFile)
+
 	mux.HandleFunc("/translate", controllers.TranslateHandler)
 	mux.HandleFunc("/load-base-text", controllers.LoadBaseFile)
 

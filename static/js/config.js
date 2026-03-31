@@ -1,9 +1,15 @@
 const config = {
-    init(){
+    init() {
 
         document.getElementById("form-config").addEventListener("submit", (e) => {
             e.preventDefault();
             config.update(e.target);
+
+        });
+
+        document.getElementById("file-uploader").addEventListener("submit", (e) => {
+            e.preventDefault();
+            config.fileUploader(e.target);
 
         });
 
@@ -13,15 +19,15 @@ const config = {
 
 
     },
-    async update(target){
+    async update(target) {
 
         let formData = new FormData(target);
-        let formObject = Object.fromEntries(formData.entries()); 
+        let formObject = Object.fromEntries(formData.entries());
 
         let options = {
-            method:"POST",
-            body:JSON.stringify(formObject, null, 2),
-            headers:{
+            method: "POST",
+            body: JSON.stringify(formObject, null, 2),
+            headers: {
                 'Content-Type': 'application/json',
             }
         }
@@ -31,20 +37,39 @@ const config = {
 
 
     },
-    async get(){
 
-        let data    = await fetch(`get-config`);
+    async fileUploader(target) {
+
+        const formData = new FormData();
+
+        formData.append("baseFile", target[0].files[0]);
+ 
+        let options = {
+            method: "POST",
+            body: formData
+        }
+
+        let data = await fetch('set-basefile', options)
+
+    },
+    async get() {
+
+        let data = await fetch(`get-config`);
         let results = await data.json();
 
-        return results;
+        // $(`#language`).selectize({
+        //     items:[results.Language]
+        // })
+
+
     },
-    async getLanguages(){
-        let data    = await fetch('/static/files/language.json')
+    async getLanguages() {
+        let data = await fetch('/static/files/language.json')
         let results = await data.json();
 
         let languageSelect = document.getElementById('language');
- 
-        for(let [index, value] of Object.entries(results)){
+
+        for (let [index, value] of Object.entries(results)) {
 
             let languageOptionElement = document.createElement(`option`)
             languageOptionElement.setAttribute('value', index)
@@ -52,16 +77,7 @@ const config = {
             languageSelect.appendChild(languageOptionElement)
         }
 
-        config.get().then((data)=>{
-
-            let $select = $(`#language`).selectize();
-
-            let control = $select[0].selectize;
-
-            control.setValue(data.Language)
-
-        });
-
+        $(`#language`).selectize();
 
     }
 
