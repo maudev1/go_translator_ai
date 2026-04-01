@@ -34,10 +34,19 @@ const config = {
 
         let data = await fetch('set-config', options)
 
-        if (data) {
+        if (!data.ok) {
+            helpers.custom_alert("Error", "danger");
+        }
+            
+        let results = await data.json();
+
+        if(!results.error){
 
             helpers.custom_alert("The Configuration has been saved", "success");
+            
         }
+
+
 
     },
 
@@ -60,10 +69,9 @@ const config = {
         let data = await fetch(`get-config`);
         let results = await data.json();
 
-        // $(`#language`).selectize({
-        //     items:[results.Language]
-        // })
+        let language = $(`#language`).selectize()[0].selectize;
 
+        language.setValue(results.Language)
 
     },
     async getLanguages() {

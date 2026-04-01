@@ -40,17 +40,9 @@ func GetConfig(db *sql.DB) Config {
 
 	return config
 
-	// return Config{
-	// 	ID:             1,
-	// 	Language:       "pt_br",
-	// 	InputFile:      "files/input/base.file",
-	// 	BaseFile:       "files/input/base.file",
-	// 	TranslatedFile: "files/input/translated.file",
-	// 	GroqToken:      "token here",
-	// }
 }
 
-func SetConfig(config ConfigRequest) {
+func SetConfig(config ConfigRequest) Config {
 
 	DB := databaseConfig.DatabaseConnect()
 
@@ -83,6 +75,8 @@ func SetConfig(config ConfigRequest) {
 		log.Fatalf("Error insert into table: %q: %s\n", err, sqlStmt)
 	}
 
+	return GetConfig(databaseConfig.DatabaseConnect())
+
 }
 
 func SetBaseFileConfig(fileName string) {
@@ -90,7 +84,7 @@ func SetBaseFileConfig(fileName string) {
 
 	var err error
 
-	sqlStmt := `UPDATE config set inputFile="` + fileName + `" WHERE id = 1`
+	sqlStmt := `UPDATE config set baseFile="` + fileName + `" WHERE id = 1`
 
 	_, err = DB.Exec(sqlStmt)
 	if err != nil {

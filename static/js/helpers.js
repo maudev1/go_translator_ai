@@ -1,5 +1,9 @@
 const helpers = {
 
+    init(){
+        console.debug(`Helpers File Has Started`)
+    },
+
     custom_alert(message, type) {
         Swal.fire({
             toast: true,

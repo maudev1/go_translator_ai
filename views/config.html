@@ -44,41 +44,89 @@
             </li>
         </ul>
 
-        <div class="container mt-4">
+        <div class="container mt-5">
 
-            <form id="form-config">
+            <div class="row">
 
-                <!-- <h2>Basic</h2> -->
-
-                <div class="form-group">
-                    <label for="" class="form-label">language</label>
-                    <select name="language" id="language" class="form-control">
-                    </select>
+                <div class="col-4">
+                    <strong>Basic Settings</strong>
                 </div>
 
-                <div class="form-group mt-3 mb-3">
-                    <label for="" class="form-label">groq token</label>
-                    <input name="groqToken" type="text" class="form-control" value="{{ .GroqToken }}">
+                <div class="col-8">
+                    <form id="form-config">
+
+                        <!-- <h2>Basic</h2> -->
+
+                        <div class="form-group">
+                            <label for="language" class="form-label">Language</label>
+                            <select name="language" id="language" class="form-control">
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-3 mb-3">
+                            <label for="groq-token" class="form-label">Groq Token</label>
+                            <input name="groqToken" type="text" class="form-control" value="{{ .GroqToken }}">
+                        </div>
+
+
+                        <div class="form-group mt-3 text-end">
+                            <button type="submit" class="btn btn-outline-nebula">Save</button>
+                        </div>
+
+                    </form>
                 </div>
 
 
-                <div class="form-group mt-3 text-end">
-                    <button type="submit" class="btn btn-outline-nebula">save</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="container mt-5">
+
+
+            <div class="row">
+                <div class="col-4">
+                    <strong>Base File</strong>
                 </div>
 
-            </form>
+                <div class="col-8">
 
-            <hr>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Current</th>
+                                <th>Upload New File</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-            <form id="file-uploader" enctype="multipart/form-data">
+                            <tr>
+                                <td >
 
-                <label for="" class="form-label">set base file</label>
-                <div class="input-group mt-3">
-                    <input type="file" name="baseFile" class="form-control">
-                    <button class="btn btn-outline-nebula" type="submit">upload</button>
+                                    <p>{{ .BaseFile }}</p>
+
+                                </td>
+
+                                <td>
+
+                                    <form id="file-uploader" enctype="multipart/form-data">
+                                        <div class="input-group mt-3">
+                                            <input id="base-file" type="file" name="baseFile" class="form-control">
+                                            <button class="btn btn-outline-nebula" type="submit">upload</button>
+                                        </div>
+
+                                    </form>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
                 </div>
 
-            </form>
+            </div>
 
         </div>
 

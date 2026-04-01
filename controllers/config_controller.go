@@ -32,7 +32,11 @@ func SetConfigHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	models.SetConfig(req)
+	config := models.SetConfig(req)
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(config)
 
 }
 
