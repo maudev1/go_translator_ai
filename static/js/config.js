@@ -61,7 +61,25 @@ const config = {
             body: formData
         }
 
-        let data = await fetch('set-basefile', options)
+        let data = await fetch('set-basefile', options);
+
+        if(!data.ok){
+            let response = await data.text();
+            helpers.custom_alert(response, "error");
+        }
+
+        let results = await data.json();
+
+        if(results.error){
+            helpers.custom_alert(results.error, "error");
+        }else{
+            helpers.custom_alert("File upload successful", "success");
+
+            document.getElementById("current-base-file").innerHTML = results.BaseFile
+        }
+
+
+        
 
     },
     async get() {

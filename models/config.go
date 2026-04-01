@@ -75,11 +75,11 @@ func SetConfig(config ConfigRequest) Config {
 		log.Fatalf("Error insert into table: %q: %s\n", err, sqlStmt)
 	}
 
-	return GetConfig(databaseConfig.DatabaseConnect())
+	return GetConfig(DB)
 
 }
 
-func SetBaseFileConfig(fileName string) {
+func SetBaseFileConfig(fileName string) Config {
 	DB := databaseConfig.DatabaseConnect()
 
 	var err error
@@ -90,5 +90,7 @@ func SetBaseFileConfig(fileName string) {
 	if err != nil {
 		log.Fatalf("Error insert into table: %q: %s\n", err, sqlStmt)
 	}
+
+	return GetConfig(DB)
 
 }
