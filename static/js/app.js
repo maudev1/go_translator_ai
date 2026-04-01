@@ -13,8 +13,6 @@ const app = {
 
             app.navigate(event.deltaY);
 
-            // app.setPosition();
-
         });
 
         document.querySelector('.translate').addEventListener('click', async function(event){
@@ -121,11 +119,11 @@ const app = {
             let lastPosition = texts.length;
             app.lastPosition = lastPosition;
 
-            let position = app.currentPosition + 1
+            let position =   Number(app.currentPosition) + 1
             
             if(direction == "up"){
                 
-                position = app.currentPosition - 1
+                position = Number(app.currentPosition) - 1
             }
 
 
@@ -148,8 +146,6 @@ const app = {
             }
 
             app.showPosition();
-
-            // document.getElementById('index-position').innerHTML = `${position}/${lastPosition}`
 
         })
 
