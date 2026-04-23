@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+var port = "8081"
+
 func main() {
 	r := routes.SetupRoutes()
 
@@ -13,9 +15,9 @@ func main() {
 		w.Write([]byte("ok"))
 	})
 
-	log.Println("rodando em http://localhost:8081")
+	log.Println("rodando em http://localhost:"+port)
 
-	err := http.ListenAndServe(":8081", r)
+	err := http.ListenAndServe(":"+port, r)
 	if err != nil {
 		log.Fatal(err)
 	}

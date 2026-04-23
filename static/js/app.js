@@ -15,27 +15,11 @@ const app = {
 
         });
 
-        document.querySelector('.translate').addEventListener('click', async function(event){
+        document.querySelector('.translate').addEventListener('click', async function (event) {
 
             const engine = event.target.dataset.engine
-            const text   = document.getElementById('editor').value;
 
-            let data = await fetch('/translate', {
-                method:'POST',
-                body: JSON.stringify({
-                    engine: engine,
-                    text: text
-                })
-            }) 
-
-            if(data.ok){
-                let response = await data.json();
-
-                document.getElementById('editor').value = response.translated
-
-            }
-
-  
+            app.autoTranslate(engine);
 
         });
 
@@ -43,7 +27,7 @@ const app = {
 
             let index = document.getElementById('index').value;
 
-            if(!index || index < 1 || typeof index == "undefined"){
+            if (!index || index < 1 || typeof index == "undefined") {
                 return;
             }
 
@@ -53,7 +37,56 @@ const app = {
 
             app.showPosition();
 
-        })
+        });
+
+
+        // Keyboard control 
+
+
+        document.addEventListener('keypress', (event) => {
+
+            console.log(event)
+
+            let key = event.key.toUpperCase();
+
+            switch (key) {
+
+                case 'W': {
+
+                    app.navigate(1);
+
+                    return;
+                }
+                case 'A': {
+
+                    app.autoTranslate('google');
+
+                    return;
+                }
+                case 'S': {
+
+                    app.navigate(2);
+
+                    return;
+                }
+                case 'D': {
+
+                    app.autoTranslate('ai');
+
+                    return;
+
+                }
+                // case 'ENTER':{
+
+                // }
+                default: {
+                    return
+                }
+
+
+            }
+
+        });
 
 
     },
@@ -82,18 +115,18 @@ const app = {
             downSelector.classList.add('active');
 
             app.setPosition('down');
-            
+
         } else {
-            
+
             // up 
-            
+
             upSelector.classList.add('active');
-            
+
             app.setPosition('up');
-            
+
         }
-        
-        
+
+
         setTimeout(function () {
             downSelector.classList.remove('active')
             upSelector.classList.remove('active')
@@ -119,15 +152,15 @@ const app = {
             let lastPosition = texts.length;
             app.lastPosition = lastPosition;
 
-            let position =   Number(app.currentPosition) + 1
-            
-            if(direction == "up"){
-                
+            let position = Number(app.currentPosition) + 1
+
+            if (direction == "up") {
+
                 position = Number(app.currentPosition) - 1
             }
 
 
-            if(position <= 0 || position > lastPosition){
+            if (position <= 0 || position > lastPosition) {
                 return;
             }
 
@@ -151,11 +184,29 @@ const app = {
 
 
     },
-    showPosition(){
+    showPosition() {
         document.getElementById('index-position').innerHTML = `${app.currentPosition}/${app.lastPosition}`
+    },
+    async autoTranslate(engine) {
+
+        const text = document.getElementById('editor').value;
+
+        let data = await fetch('/translate', {
+            method: 'POST',
+            body: JSON.stringify({
+                engine: engine,
+                text: text
+            })
+        })
+
+        if (data.ok) {
+            let response = await data.json();
+
+            document.getElementById('editor').value = response.translated
+
+        }
+
     }
-
-
 
 
 
