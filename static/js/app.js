@@ -15,7 +15,15 @@ const app = {
 
         });
 
-        document.querySelector('.translate').addEventListener('click', async function (event) {
+        document.querySelector('.translate-google').addEventListener('click', async function (event) {
+
+            const engine = event.target.dataset.engine
+
+            app.autoTranslate(engine);
+
+        });
+
+        document.querySelector('.translate-ai').addEventListener('click', async function (event) {
 
             const engine = event.target.dataset.engine
 
@@ -206,7 +214,7 @@ const app = {
 
         }
 
-    }
+    },
 
 
 

@@ -12,6 +12,8 @@ import (
 	databaseConfig "app_translator/config"
 
 	translator "github.com/Conight/go-googletrans"
+
+	groq "app_translator/config"
 )
 
 type TextKey struct {
@@ -22,6 +24,14 @@ type TextKey struct {
 type TranslateRequest struct {
 	Engine string `json:"engine"`
 	Text   string `json:"text"`
+}
+
+type TranslateReponse struct {
+	Engine     string `json:"engine"`
+	Original   string `json:"original"`
+	Translated string `json:"translated"`
+	Source     string `json:"source"`
+	Target     string `json:"target"`
 }
 
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
@@ -44,12 +54,37 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp := map[string]interface{}{
-			"engine":     req.Engine,
-			"original":   result.Origin,
-			"translated": result.Text,
-			"source":     result.Src,
-			"target":     result.Dest,
+		resp := TranslateReponse{
+			Engine:     req.Engine,
+			Original:   result.Origin,
+			Translated: result.Text,
+			Source:     result.Src,
+			Target:     result.Dest,
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(resp)
+		return
+	}
+
+	if req.Engine == "ai" {
+		response := groq.Chat(req.Text, config.GroqToken)
+
+		var data map[string]interface{}
+		err = json.Unmarshal([]byte(response), &data)
+		if err != nil {
+			http.Error(w, "JSON inválido", http.StatusBadRequest)
+			return
+		}
+
+		var translated = data["choices"].([]interface{})[0].(map[string]interface{})["message"].(map[string]interface{})["content"].(string)
+
+		resp := TranslateReponse{
+			Engine:     "ai",
+			Original:   req.Text,
+			Translated: translated,
+			Source:     "",
+			Target:     "",
 		}
 
 		w.Header().Set("Content-Type", "application/json")
